@@ -51,4 +51,12 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
+
+    @ExceptionHandler(GoodNotFoundException.class)
+    public ResponseEntity<Response> goodNotFoundException(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
 }

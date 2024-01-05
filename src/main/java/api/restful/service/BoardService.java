@@ -51,7 +51,8 @@ public class BoardService {
     }
 
     public ResponseEntity<Response> findByWriter(Long memberId){
-        List<Board> boards = boardRepository.findByMember_Id(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        List<Board> boards = boardRepository.findByMember(member);
         List<BoardResponse> boardResponses = boards.stream()
                 .map(board -> new BoardResponse(board))
                 .collect(Collectors.toList());

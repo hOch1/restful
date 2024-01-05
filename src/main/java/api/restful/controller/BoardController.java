@@ -29,6 +29,11 @@ public class BoardController {
         return boardService.findOne(id);
     }
 
+    @GetMapping("/boards/member/{id}")
+    public ResponseEntity<Response> findWriter(@PathVariable Long id){
+        return boardService.findByWriter(id);
+    }
+
     @DeleteMapping("/board/{id}")
     public ResponseEntity<Response> delete(@PathVariable Long id){
         return boardService.delete(id);

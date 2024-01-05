@@ -8,6 +8,7 @@ import api.restful.dto.good.CreateGoodRequest;
 import api.restful.dto.good.GoodResponse;
 import api.restful.exception.AlreadyGoodException;
 import api.restful.exception.BoardNotFoundException;
+import api.restful.exception.GoodNotFoundException;
 import api.restful.exception.MemberNotFoundException;
 import api.restful.repository.BoardRepository;
 import api.restful.repository.GoodRepository;
@@ -38,6 +39,15 @@ public class GoodService {
         return ResponseEntity.ok(new Response(true, new GoodResponse(good)));
     }
 
+    public ResponseEntity<Response> deleteGood(Long memberId, Long boardId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        Good good = goodRepository.findByMemberAndBoard(member, board).orElseThrow(GoodNotFoundException::new);
+
+        goodRepository.delete(good);
+
+        return ResponseEntity.ok(new Response(true, new GoodResponse(good)));
+    }
     private void validationAlreadyGood(CreateGoodRequest request) {
         if(goodRepository.existsByMember_IdAndBoard_Id(request.getMember(), request.getBoard()))
             throw new AlreadyGoodException();

@@ -5,9 +5,7 @@ import api.restful.dto.good.CreateGoodRequest;
 import api.restful.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,5 +16,12 @@ public class GoodController {
     @PostMapping("/good")
     public ResponseEntity<Response> addGood(@RequestBody CreateGoodRequest request){
         return goodService.addGood(request);
+    }
+
+    @DeleteMapping("/good/{memberId}/{boardId}")
+    public ResponseEntity<Response> deleteGood(@PathVariable Long memberId,
+                                               @PathVariable Long boardId){
+
+        return goodService.deleteGood(memberId, boardId);
     }
 }
