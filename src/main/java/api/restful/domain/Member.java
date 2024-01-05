@@ -1,7 +1,5 @@
 package api.restful.domain;
 
-import api.restful.dto.member.CreateMemberRequest;
-import api.restful.dto.member.MemberResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

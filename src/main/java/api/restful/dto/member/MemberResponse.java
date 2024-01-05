@@ -35,5 +35,4 @@ public class MemberResponse {
                 .map(board -> new BoardResponse(board))
                 .collect(Collectors.toList());
     }
-
 }

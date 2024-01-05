@@ -7,5 +7,6 @@ public class CreateMemberRequest {
 
     private String email;
     private String password;
+    private String confirmPassword;
     private String name;
 }

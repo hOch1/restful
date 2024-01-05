@@ -6,6 +6,7 @@ import api.restful.dto.Response;
 import api.restful.dto.member.MemberResponse;
 import api.restful.exception.MemberEmailAlreadyExistsException;
 import api.restful.exception.MemberNotFoundException;
+import api.restful.exception.NotConfirmPassword;
 import api.restful.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public ResponseEntity<Response> saveMember(CreateMemberRequest request){
+        validationMember(request);
+
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .name(request.getName())
                 .build();
 
-        validationMember(member);
         memberRepository.save(member);
 
         return ResponseEntity.ok(new Response<>(true, new MemberResponse(member)));
@@ -71,8 +73,10 @@ public class MemberService {
         return ResponseEntity.ok().body(new Response<>(true, new MemberResponse(member)));
     }
 
-    private void validationMember(Member member) {
-        if (memberRepository.existsByEmail(member.getEmail()))
+    private void validationMember(CreateMemberRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword()))
+            throw new NotConfirmPassword();
+        if (memberRepository.existsByEmail(request.getEmail()))
             throw new MemberEmailAlreadyExistsException();
     }
 }
