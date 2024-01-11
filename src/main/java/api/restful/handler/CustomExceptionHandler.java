@@ -59,4 +59,12 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
     }
+
+    @ExceptionHandler(TokenHasNotAuthentication.class)
+    public ResponseEntity<Response> tokenHasNotAuthentication(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
 }

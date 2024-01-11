@@ -16,6 +16,7 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Board", description = "게시판 관련 API")
+@RequestMapping("/api")
 public class BoardController {
 
     private final BoardService boardService;

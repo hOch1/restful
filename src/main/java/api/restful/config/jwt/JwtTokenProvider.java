@@ -1,6 +1,7 @@
 package api.restful.config.jwt;
 
 import api.restful.dto.JwtToken;
+import api.restful.exception.TokenHasNotAuthentication;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null)
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new TokenHasNotAuthentication();
 
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))

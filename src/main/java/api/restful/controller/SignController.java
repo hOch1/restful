@@ -5,6 +5,7 @@ import api.restful.dto.member.MemberResponse;
 import api.restful.dto.member.SignInRequest;
 import api.restful.dto.member.SignUpRequest;
 import api.restful.service.MemberService;
+import api.restful.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "Bearer")
 public class SignController {
 
-    private final MemberService memberService;
+    private final SignService signService;
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
     public ResponseEntity<Response> signup(@RequestBody SignUpRequest request){
-        return memberService.saveMember(request);
+        return signService.signUp(request);
     }
 
     @PostMapping("/signin")
     @Operation(summary = "로그인")
     public ResponseEntity<Response> signin(@RequestBody SignInRequest request){
-        return memberService.signIn(request.getEmail(), request.getPassword());
+        return signService.signIn(request.getEmail(), request.getPassword());
     }
 
 }
