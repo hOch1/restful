@@ -9,7 +9,6 @@ public class CreateBoardRequest {
 
     private String title;
     private String content;
-    private Long memberId;
 
     public Board toEntity(Member member){
         return Board.builder()

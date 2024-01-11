@@ -10,12 +10,15 @@ spring:
     open-in-view: true
     hibernate:
       ddl-auto: create
-    show-sql: true
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
 
+
 logging:
   level:
     org.hibernate.SQL: debug
+
+jwt:
+  secret: 6ceb6b79cf6ec1c830329b9f8a42f05076fe6b03db5d17a4b2edcb5b01a9f378asd123

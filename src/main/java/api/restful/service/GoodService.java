@@ -29,8 +29,10 @@ public class GoodService {
     private final BoardRepository boardRepository;
 
     public ResponseEntity<Response> addGood(CreateGoodRequest request){
-        Member member = memberRepository.findById(request.getMember()).orElseThrow(MemberNotFoundException::new);
-        Board board = boardRepository.findById(request.getBoard()).orElseThrow(BoardNotFoundException::new);
+        Member member = memberRepository.findById(request.getMember())
+                .orElseThrow(MemberNotFoundException::new);
+        Board board = boardRepository.findById(request.getBoard())
+                .orElseThrow(BoardNotFoundException::new);
 
         validationAlreadyGood(request);
 
@@ -40,9 +42,12 @@ public class GoodService {
     }
 
     public ResponseEntity<Response> deleteGood(Long memberId, Long boardId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
-        Good good = goodRepository.findByMemberAndBoard(member, board).orElseThrow(GoodNotFoundException::new);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(BoardNotFoundException::new);
+        Good good = goodRepository.findByMemberAndBoard(member, board)
+                .orElseThrow(GoodNotFoundException::new);
 
         goodRepository.delete(good);
 

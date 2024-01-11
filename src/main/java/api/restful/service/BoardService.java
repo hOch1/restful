@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    public ResponseEntity<Response> createBoard(CreateBoardRequest request){
-        Member member = memberRepository.findById(request.getMemberId())
+    public ResponseEntity<Response> createBoard(CreateBoardRequest request,
+                                                Principal principal){
+        Member member = memberRepository.findByEmail(principal.getName())
                 .orElseThrow(MemberNotFoundException::new);
         Board board = request.toEntity(member);
 
@@ -36,7 +38,8 @@ public class BoardService {
     }
 
     public ResponseEntity<Response> findOne(Long id){
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
+        Board board = boardRepository.findById(id)
+                .orElseThrow(BoardNotFoundException::new);
 
         return ResponseEntity.ok().body(new Response<>(true, new BoardResponse(board)));
     }
@@ -51,7 +54,8 @@ public class BoardService {
     }
 
     public ResponseEntity<Response> findByWriter(Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
         List<Board> boards = boardRepository.findByMember(member);
         List<BoardResponse> boardResponses = boards.stream()
                 .map(board -> new BoardResponse(board))
@@ -61,7 +65,8 @@ public class BoardService {
     }
 
     public ResponseEntity<Response> delete(Long id){
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
+        Board board = boardRepository.findById(id)
+                .orElseThrow(BoardNotFoundException::new);
 
         boardRepository.delete(board);
 

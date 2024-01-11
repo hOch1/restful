@@ -3,10 +3,8 @@ package api.restful.dto.member;
 import lombok.Data;
 
 @Data
-public class CreateMemberRequest {
+public class SignInRequest {
 
     private String email;
     private String password;
-    private String confirmPassword;
-    private String name;
 }
