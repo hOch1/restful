@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/signup", "/signin", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/signup", "/signin", "/swagger-ui/**", "/v3/api-docs/**", "/reissue").permitAll()
                         .requestMatchers("/api/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )

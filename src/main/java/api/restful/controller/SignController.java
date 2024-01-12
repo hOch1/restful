@@ -1,5 +1,6 @@
 package api.restful.controller;
 
+import api.restful.dto.JwtToken;
 import api.restful.dto.Response;
 import api.restful.dto.member.MemberResponse;
 import api.restful.dto.member.SignInRequest;
@@ -14,9 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,6 +40,14 @@ public class SignController {
     @Operation(summary = "로그인")
     public ResponseEntity<Response> signin(@RequestBody SignInRequest request){
         return signService.signIn(request.getEmail(), request.getPassword());
+    }
+
+    @PostMapping("/reissue")
+    @Operation(summary = "Access Token 재발행")
+    public ResponseEntity<Response> reIssue(@RequestHeader HttpHeaders headers,
+                                            @RequestBody SignInRequest signInRequest){
+        String accessToken = headers.getFirst("Authorization");
+        return signService.reissue(accessToken, signInRequest);
     }
 
 }

@@ -67,4 +67,36 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
+
+    @ExceptionHandler(ExpiredJwtTokenException.class)
+    public ResponseEntity<Response> expiredJwtTokenException(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<Response> invalidJwtTokenException(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler(UnsupportedJwtTokenException.class)
+    public ResponseEntity<Response> unsupportedJwtTokenException(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler(JwtClaimsIsEmptyException.class)
+    public ResponseEntity<Response> jwtClaimsIsEmptyException(Exception e){
+        Response response = new Response(false, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
 }

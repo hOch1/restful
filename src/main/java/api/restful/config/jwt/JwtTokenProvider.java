@@ -1,7 +1,7 @@
 package api.restful.config.jwt;
 
 import api.restful.dto.JwtToken;
-import api.restful.exception.TokenHasNotAuthentication;
+import api.restful.exception.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
 
-        Date accessTokenExpiresIn = new Date(now.getTime() + 1000 * 60 * 30);
+        Date accessTokenExpiresIn = new Date(now.getTime() + 1000 * 60 * 30); // 30분
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -50,14 +50,16 @@ public class JwtTokenProvider {
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now.getTime() + 1000 * 60 * 30 * 24 * 7))
+                .setExpiration(new Date(now.getTime() + 1000 * 60 * 60 * 24 * 7)) // 1주
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return JwtToken.builder()
                 .grantType("Bearer")
+                .authorization(authorities)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
                 .build();
     }
 
@@ -84,15 +86,14 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         }catch (SecurityException | MalformedJwtException e){
-            log.info("Invalid JWT Token", e);
+            throw new InvalidJwtTokenException();
         }catch (ExpiredJwtException e){
-            log.info("Expired JWT Token", e);
+            throw new ExpiredJwtTokenException();
         }catch (UnsupportedJwtException e){
-            log.info("Unsupported JWT Token", e);
+            throw new UnsupportedJwtTokenException();
         }catch (IllegalArgumentException e){
-            log.info("JWT claims string is empty", e);
+            throw new JwtClaimsIsEmptyException();
         }
-        return false;
     }
 
     private Claims parseClaims(String accessToken) {
@@ -103,7 +104,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(accessToken)
                     .getBody();
         }catch (ExpiredJwtException e){
-            return e.getClaims();
+            throw new ExpiredJwtTokenException();
         }
     }
 }
