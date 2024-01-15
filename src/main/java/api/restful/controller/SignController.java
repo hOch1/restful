@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,15 @@ public class SignController {
                                             @RequestBody SignInRequest signInRequest){
         String accessToken = headers.getFirst("Authorization");
         return signService.reissue(accessToken, signInRequest);
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    public ResponseEntity<Response> logout(HttpRequest request){
+
+        String accessToken = request.getHeaders().get("Authorization").toString();
+
+        return signService.logout(accessToken);
     }
 
 }

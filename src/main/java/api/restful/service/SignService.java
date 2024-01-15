@@ -81,12 +81,24 @@ public class SignService {
         }else
             throw new UnsupportedJwtTokenException();
     }
+
+    public ResponseEntity<Response> logout(String accessToken) {
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccessToken(accessToken);
+
+        if (refreshToken.isPresent()){
+            refreshTokenRepository.delete(refreshToken.get());
+        }
+
+        return ResponseEntity.ok(new Response(true, "logout Success"));
+    }
+
     private void validationMember(SignUpRequest request) {
         if (!request.getPassword().equals(request.getConfirmPassword()))
             throw new NotConfirmPassword();
         if (memberRepository.existsByEmail(request.getEmail()))
             throw new MemberEmailAlreadyExistsException();
     }
+
 
 
 }
